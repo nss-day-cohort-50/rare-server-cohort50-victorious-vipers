@@ -30,7 +30,7 @@ def found_user(object):
         found_email = db_cursor.fetchone() 
 
         if found_email:
-            return json.dumps({"valid":True})
+            return json.dumps({"valid":True, "token":found_email["id"]})
 
         else:
             return json.dumps({"valid":False})

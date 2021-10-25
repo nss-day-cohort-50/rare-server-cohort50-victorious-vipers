@@ -1,5 +1,6 @@
 import json
-from http.server import BaseHTTPRequestHandler, HTTPServer 
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from categories.request import get_all_categorys, get_single_category, create_category, get_categories_by_label, get_categories_by_id
 from users import create_new_user, found_user
 
 
@@ -77,11 +78,25 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Parse the URL and capture the tuple that is returned
         
         if len(parsed) == 2:
-            (resource, id) = self.parse_url(self.path)
+            (resource, id) = parsed  #self.parse_url(self.path)
+
+            if resource == "categories":
+
+                if id is not None:
+                    response = f"{get_single_category(id)}"
+                else:
+                    response = f"{get_all_categorys()}"
             
             
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
+
+            if resource == "categories":
+                if key == "label":
+                    response = get_categories_by_label(value)       
+                elif key == "id":
+                    response = get_categories_by_id(value)
+                        
 
             # Is the resource `customers` and was there a
             # query parameter that specified the customer
@@ -113,6 +128,9 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_item = create_new_user(post_body)
         elif resource == "login":
             new_item = found_user(post_body)
+        if resource == "categories":
+            new_item == create_category(post_body)
+        
         self.wfile.write(f"{new_item}".encode())
         # Encode the new animal and send in response
         
