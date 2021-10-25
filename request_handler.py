@@ -128,7 +128,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_item = create_new_user(post_body)
         elif resource == "login":
             new_item = found_user(post_body)
-        if resource == "categories":
+        if resource == "labels":
             new_item == create_category(post_body)
         
         self.wfile.write(f"{new_item}".encode())

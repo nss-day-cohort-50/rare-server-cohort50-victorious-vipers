@@ -79,22 +79,13 @@ def create_category(new_category):
 
         db_cursor.execute("""
         INSERT INTO Categories
-            ( label, )
-        VALUES
-            ( ? );
-        """, (new_category['label'], ))
+            (id, label)
+        VALUES (?, ?);
+        """, (new_category['id'], new_category['label'], ))
+        
 
-        # The `lastrowid` property on the cursor will return
-        # the primary key of the last thing that got added to
-        # the database.
         id = db_cursor.lastrowid
-
-        # Add the `id` property to the animal dictionary that
-        # was sent by the client so that the client sees the
-        # primary key in the response.
         new_category['id'] = id
-
-
     return json.dumps(new_category)
 
 def get_categories_by_label(label):
