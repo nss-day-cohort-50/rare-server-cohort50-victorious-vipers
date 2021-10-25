@@ -1,7 +1,7 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer 
 
-
+from posts import get_users_post
 
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
@@ -83,6 +83,9 @@ class HandleRequests(BaseHTTPRequestHandler):
             
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
+            if resource == "posts":
+                if key == "user_id":
+                    response = f"{get_users_post(value)}"
 
             # Is the resource `customers` and was there a
             # query parameter that specified the customer
