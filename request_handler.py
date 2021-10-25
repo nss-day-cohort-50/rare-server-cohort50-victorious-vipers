@@ -1,6 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer 
-
+from users import create_new_user, found_user
 
 
 # Here's a class. It inherits from another class.
@@ -110,9 +110,9 @@ class HandleRequests(BaseHTTPRequestHandler):
         # function next.
         #EXAMPLE BELOW
         if resource == "register":
-            new_item = create_user(post_body)
-            
-        
+            new_item = create_new_user(post_body)
+        elif resource == "login":
+            new_item = found_user(post_body)
         self.wfile.write(f"{new_item}".encode())
         # Encode the new animal and send in response
         
