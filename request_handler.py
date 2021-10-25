@@ -1,7 +1,7 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-
 from tags import create_tag
+from users import create_new_user, found_user
 
 
 # Here's a class. It inherits from another class.
@@ -50,7 +50,6 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Notice this Docstring also includes information about the arguments passed to the function
         """Sets the status code, Content-Type and Access-Control-Allow-Origin
         headers on the response
-
         Args:
             status (number): the status code to return to the front end
         """
@@ -116,6 +115,11 @@ class HandleRequests(BaseHTTPRequestHandler):
         if resource == "tags":
             new_item = create_tag(post_body)
 
+        #EXAMPLE BELOW
+        if resource == "register":
+            new_item = create_new_user(post_body)
+        elif resource == "login":
+            new_item = found_user(post_body)
         self.wfile.write(f"{new_item}".encode())
         # Encode the new animal and send in response
 
