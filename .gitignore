@@ -149,3 +149,4 @@ cython_debug/
 rare.db
 Pipfile*
 .vscode
+rare.sql
