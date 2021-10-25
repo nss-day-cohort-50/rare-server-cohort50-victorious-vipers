@@ -109,8 +109,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         # the orange squiggle, you'll define the create_animal
         # function next.
         #EXAMPLE BELOW
-        # if resource == "animals":
-        #     new_item = create_animal(post_body)
+        if resource == "register":
+            new_item = create_user(post_body)
             
         
         self.wfile.write(f"{new_item}".encode())
