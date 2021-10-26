@@ -19,11 +19,7 @@ def found_user(object):
     with sqlite3.connect("./rare.db") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
-<<<<<<< HEAD
-        db_cursor.execute("""
-=======
         db_cursor.execute(f"""
->>>>>>> 2a3d30bcce3b3ac0501820c2196d421e22ed4f45
         SELECT id, email
         FROM Users
         WHERE email = "{object['username']}"

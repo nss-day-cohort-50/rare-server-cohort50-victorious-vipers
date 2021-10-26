@@ -1,19 +1,9 @@
 import json
-<<<<<<< HEAD
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from categories.request import get_all_categorys, get_single_category, create_category, get_categories_by_label, get_categories_by_id
-=======
-from http.server import BaseHTTPRequestHandler, HTTPServer 
-
-<<<<<<< HEAD
-from posts import get_users_post
->>>>>>> 2a3d30bcce3b3ac0501820c2196d421e22ed4f45
-from users import create_new_user, found_user
-=======
-=======
-from posts import get_users_post, add_Post, delete_post, get_single_post, edit_post 
->>>>>>> main
 from users import create_new_user, found_user, get_users
+from posts import get_users_post, add_Post, delete_post, get_single_post, edit_post 
+
 
 
 # Here's a class. It inherits from another class.
@@ -146,14 +136,10 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_item = create_new_user(post_body)
         elif resource == "login":
             new_item = found_user(post_body)
-<<<<<<< HEAD
         elif resource == "categories":
             new_item = create_category(post_body)
-        
-=======
         elif resource == "posts":
             new_item = add_Post(post_body)
->>>>>>> main
         self.wfile.write(f"{new_item}".encode())
         # Encode the new animal and send in response
         
