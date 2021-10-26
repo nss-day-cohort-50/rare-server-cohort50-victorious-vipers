@@ -129,8 +129,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         # EXAMPLE BELOW
         # if resource == "animals":
         #     new_item = create_animal(post_body)
-        if resource == "tags":
-            new_item = create_tag(post_body)
+        
 
         #EXAMPLE BELOW
         if resource == "register":
@@ -139,6 +138,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_item = found_user(post_body)
         elif resource == "posts":
             new_item = add_Post(post_body)
+        elif resource == "tags":
+            new_item = create_tag(post_body)
         self.wfile.write(f"{new_item}".encode())
         # Encode the new animal and send in response
 
