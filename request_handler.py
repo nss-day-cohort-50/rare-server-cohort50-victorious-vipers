@@ -1,12 +1,7 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer 
-<<<<<<< HEAD
-
-from posts import get_users_post
-from users import create_new_user, found_user
-=======
 from users import create_new_user, found_user, get_users
->>>>>>> main
+from posts import get_users_post
 
 
 # Here's a class. It inherits from another class.
