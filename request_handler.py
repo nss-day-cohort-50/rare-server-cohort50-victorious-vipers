@@ -1,6 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer 
-from users import create_new_user, found_user
+from users import create_new_user, found_user, get_users
 
 
 # Here's a class. It inherits from another class.
@@ -79,6 +79,11 @@ class HandleRequests(BaseHTTPRequestHandler):
         if len(parsed) == 2:
             (resource, id) = self.parse_url(self.path)
             
+            if resource == "users":
+                if id is not None:
+                    response = f"{get_users()}"
+                else:
+                    response = f"{get_users()}"
             
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
