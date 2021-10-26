@@ -38,6 +38,7 @@ def get_all_tags():
             t.id,
             t.label
         FROM tags t
+        ORDER BY t.label ASC
         """)
 
 
