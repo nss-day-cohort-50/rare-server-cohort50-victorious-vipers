@@ -19,12 +19,12 @@ def found_user(object):
     with sqlite3.connect("./rare.db") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
-        db_cursor.execute("""
+        db_cursor.execute(f"""
         SELECT id, email
         FROM Users
-        WHERE email = ?
+        WHERE email = "{object['username']}"
 
-        """, (object['username'], ))
+        """)
 
         found_email = db_cursor.fetchone() 
 
