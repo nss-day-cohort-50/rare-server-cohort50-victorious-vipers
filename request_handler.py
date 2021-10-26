@@ -1,7 +1,17 @@
 import json
+<<<<<<< HEAD
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from categories.request import get_all_categorys, get_single_category, create_category, get_categories_by_label, get_categories_by_id
+=======
+from http.server import BaseHTTPRequestHandler, HTTPServer 
+<<<<<<< HEAD
+
+from posts import get_users_post
+>>>>>>> 2a3d30bcce3b3ac0501820c2196d421e22ed4f45
 from users import create_new_user, found_user
+=======
+from users import create_new_user, found_user, get_users
+>>>>>>> main
 
 
 # Here's a class. It inherits from another class.
@@ -87,9 +97,17 @@ class HandleRequests(BaseHTTPRequestHandler):
                 else:
                     response = f"{get_all_categorys()}"
             
+            if resource == "users":
+                if id is not None:
+                    response = f"{get_users()}"
+                else:
+                    response = f"{get_users()}"
             
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
+            if resource == "posts":
+                if key == "user_id":
+                    response = f"{get_users_post(value)}"
 
             if resource == "categories":
                 if key == "label":

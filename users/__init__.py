@@ -1,1 +1,1 @@
-from .request import create_new_user, found_user
+from .request import create_new_user, found_user, get_users

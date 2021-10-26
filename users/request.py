@@ -8,11 +8,10 @@ def create_new_user(new_user):
         db_cursor = conn.cursor()
         db_cursor.execute("""
         INSERT INTO Users
-            (id, first_name, last_name, email, username, password)
-        VALUES (?, ?, ?, ?, ?, ?)
+            (first_name, last_name, email, username, password)
+        VALUES (?, ?, ?, ?, ?);
         """, (new_user['first_name'], new_user['last_name'], new_user['email'], new_user['username'], new_user['password'], ))
-        id = db_cursor.lastrowid
-        new_user['id'] = id
+       
     return json.dumps(new_user)
 
 
@@ -20,12 +19,16 @@ def found_user(object):
     with sqlite3.connect("./rare.db") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
+<<<<<<< HEAD
         db_cursor.execute("""
+=======
+        db_cursor.execute(f"""
+>>>>>>> 2a3d30bcce3b3ac0501820c2196d421e22ed4f45
         SELECT id, email
         FROM Users
-        WHERE email = ?
+        WHERE email = "{object['username']}"
 
-        """, (object['username'], ))
+        """)
 
         found_email = db_cursor.fetchone() 
 
@@ -34,3 +37,27 @@ def found_user(object):
 
         else:
             return json.dumps({"valid":False})
+
+def get_users():
+    with sqlite3.connect("./rare.db") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        SELECT 
+            users.id,
+            users.first_name,
+            users.last_name,
+            users.email,
+            users.bio,
+            users.username,
+            users.password,
+            users.created_on,
+            users.active
+        FROM Users
+        """)
+        users = []
+        data = db_cursor.fetchall()
+        for row in data:
+            user = User(row['id'], row['first_name'], row['last_name'], row['email'], row['bio'], row['username'], row['password'], row['created_on'], row['active'] )
+            users.append(user.__dict__)
+        return json.dumps(users)
