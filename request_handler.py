@@ -1,6 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from tags import create_tag
+from tags import create_tag, get_all_tags
 from users import create_new_user, found_user
 
 
@@ -87,6 +87,9 @@ class HandleRequests(BaseHTTPRequestHandler):
             # Is the resource `customers` and was there a
             # query parameter that specified the customer
             # email as a filtering value?
+
+        if resource == 'tags':
+            response = f"{get_all_tags()}"
 
         self.wfile.write(response.encode())
 

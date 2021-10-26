@@ -1,6 +1,6 @@
 import sqlite3
 import json
-from models import Tag, tag
+from models import Tag
 
 
 def create_tag(new_tag):
@@ -28,7 +28,7 @@ def create_tag(new_tag):
 
 
 def get_all_tags():
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect("./rare.db") as conn:
 
         # Just use these. It's a Black Box.
         conn.row_factory = sqlite3.Row
