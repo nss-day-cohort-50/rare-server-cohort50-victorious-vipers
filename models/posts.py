@@ -7,3 +7,4 @@ class Posts:
         self.publication_date = publication_date
         self.content = content
         self.category = None
+        self.user = None

@@ -21,7 +21,7 @@ def found_user(object):
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
         db_cursor.execute("""
-        SELECT email
+        SELECT id,email
         FROM Users
         WHERE email = ?
 
@@ -30,7 +30,7 @@ def found_user(object):
         found_email = db_cursor.fetchone() 
 
         if found_email:
-            return json.dumps({"valid":True})
+            return json.dumps({"valid":True, "token":found_email["id"]})
 
         else:
             return json.dumps({"valid":False})
