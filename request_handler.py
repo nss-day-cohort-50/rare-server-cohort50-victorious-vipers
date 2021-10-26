@@ -1,9 +1,8 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from tags import create_tag, get_all_tags
-from posts import get_users_post
+from posts import get_users_post, add_Post, delete_post, get_single_post, edit_post 
 from users import create_new_user, found_user, get_users
-
 
 
 # Here's a class. It inherits from another class.
@@ -88,7 +87,11 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_users()}"
                 else:
                     response = f"{get_users()}"
-            
+            elif resource == "posts":
+                if id is not None:
+                    response = f"{get_single_post(id)}"
+                else:
+                    pass
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
             if resource == "posts":
@@ -134,6 +137,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_item = create_new_user(post_body)
         elif resource == "login":
             new_item = found_user(post_body)
+        elif resource == "posts":
+            new_item = add_Post(post_body)
         self.wfile.write(f"{new_item}".encode())
         # Encode the new animal and send in response
 
@@ -152,7 +157,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         # EXAMPLE BELOW
         # if resource == "animals":
         #     success = update_animal(id, post_body)
-
+        if resource == "posts":
+            success = edit_post(id, post_body)
         # Encode the new animal and send in response
         if success:
             self._set_headers(204)
@@ -171,7 +177,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         # EXAMPLE BELOW
         # if resource == "animals":
         #     delete_animal(id)
-
+        if resource == "posts":
+            delete_post(id)
         # Encode the new animal and send in response
         self.wfile.write("".encode())
 
