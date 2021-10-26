@@ -112,24 +112,18 @@ class HandleRequests(BaseHTTPRequestHandler):
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
 
-        # Convert JSON string to a Python dictionary
         post_body = json.loads(post_body)
 
-        # Parse the URL
         (resource, id) = self.parse_url(self.path)
 
-        # Initialize new animal
         new_item = None
-        # Add a new animal to the list. Don't worry about
-        # the orange squiggle, you'll define the create_animal
-        # function next.
-        #EXAMPLE BELOW
+
         if resource == "register":
             new_item = create_new_user(post_body)
         elif resource == "login":
             new_item = found_user(post_body)
-        if resource == "labels":
-            new_item == create_category(post_body)
+        elif resource == "categories":
+            new_item = create_category(post_body)
         
         self.wfile.write(f"{new_item}".encode())
         # Encode the new animal and send in response

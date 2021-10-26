@@ -79,14 +79,14 @@ def create_category(new_category):
 
         db_cursor.execute("""
         INSERT INTO Categories
-            (id, label)
-        VALUES (?, ?);
-        """, (new_category['id'], new_category['label'], ))
+            (label)
+        VALUES (?);
+        """, (new_category['label'], ))
         
 
-        id = db_cursor.lastrowid
-        new_category['id'] = id
-    return json.dumps(new_category)
+    #     id = db_cursor.lastrowid
+        # new_category['id'] = id
+        return json.dumps("item")
 
 def get_categories_by_label(label):
 
