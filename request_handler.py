@@ -1,8 +1,9 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from categories.request import get_all_categorys, get_single_category, create_category, get_categories_by_label, get_categories_by_id
-from users import create_new_user, found_user, get_users
+from categories import get_all_categorys, get_single_category, create_category, get_categories_by_label, get_categories_by_id
+from tags import create_tag, get_all_tags
 from posts import get_users_post, add_Post, delete_post, get_single_post, edit_post 
+from users import create_new_user, found_user, get_users
 
 
 
@@ -17,6 +18,7 @@ class HandleRequests(BaseHTTPRequestHandler):
     # It gives a description of the class or function
     """Controls the functionality of any GET, PUT, POST, DELETE requests to the server
     """
+
     def parse_url(self, path):
         path_params = path.split("/")
         resource = path_params[1]
@@ -31,7 +33,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             key = pair[0]  # 'email'
             value = pair[1]  # 'jenna@solis.com'
 
-            return ( resource, key, value )
+            return (resource, key, value)
 
         # No query string parameter
         else:
@@ -78,7 +80,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         response = {}  # Default response
         parsed = self.parse_url(self.path)
         # Parse the URL and capture the tuple that is returned
-        
+
         if len(parsed) == 2:
             (resource, id) = parsed  #self.parse_url(self.path)
 
@@ -115,12 +117,15 @@ class HandleRequests(BaseHTTPRequestHandler):
             # Is the resource `customers` and was there a
             # query parameter that specified the customer
             # email as a filtering value?
-            
-        self.wfile.write(response.encode())
 
+        if resource == 'tags':
+            response = f"{get_all_tags()}"
+
+        self.wfile.write(response.encode())
 
     # Here's a method on the class that overrides the parent's method.
     # It handles any POST request.
+
     def do_POST(self):
         self._set_headers(201)
         content_len = int(self.headers.get('content-length', 0))
@@ -140,9 +145,10 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_item = create_category(post_body)
         elif resource == "posts":
             new_item = add_Post(post_body)
+        elif resource == "tags":
+            new_item = create_tag(post_body)
         self.wfile.write(f"{new_item}".encode())
         # Encode the new animal and send in response
-        
 
     # Here's a method on the class that overrides the parent's method.
     # It handles any PUT request.
@@ -156,7 +162,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         (resource, id) = self.parse_url(self.path)
         success = False
         # Delete a single animal from the list
-        #EXAMPLE BELOW
+        # EXAMPLE BELOW
         # if resource == "animals":
         #     success = update_animal(id, post_body)
         if resource == "posts":
@@ -168,16 +174,15 @@ class HandleRequests(BaseHTTPRequestHandler):
             self._set_headers(404)
         self.wfile.write("".encode())
 
-
     def do_DELETE(self):
-    # Set a 204 response code
+        # Set a 204 response code
         self._set_headers(204)
 
         # Parse the URL
         (resource, id) = self.parse_url(self.path)
 
         # Delete a single animal from the list
-        #EXAMPLE BELOW
+        # EXAMPLE BELOW
         # if resource == "animals":
         #     delete_animal(id)
         if resource == "posts":
@@ -187,6 +192,8 @@ class HandleRequests(BaseHTTPRequestHandler):
 
 # This function is not inside the class. It is the starting
 # point of this application.
+
+
 def main():
     """Starts the server on port 8088 using the HandleRequests class
     """
