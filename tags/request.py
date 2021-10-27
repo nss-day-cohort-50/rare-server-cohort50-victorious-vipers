@@ -8,7 +8,7 @@ def create_tag(new_tag):
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
-        INSERT INTO Tag
+        INSERT INTO Tags
             (label)
         VALUES
             ( ? );
