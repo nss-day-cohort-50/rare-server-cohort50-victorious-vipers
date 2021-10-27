@@ -33,3 +33,14 @@ def get_comments_by_post(id):
             comment.user = {"id":row['user_id'], "username": row['username']}
             comments.append(comment.__dict__)
         return json.dumps(comments)
+
+
+def create_comment(object):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        INSERT INTO Comments
+            (id, post_id, author_id, content, created_on)
+        VALUES 
+            (?,?,?,?,?)
+        """)
