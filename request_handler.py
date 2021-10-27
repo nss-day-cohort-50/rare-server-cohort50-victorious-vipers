@@ -91,7 +91,7 @@ class HandleRequests(BaseHTTPRequestHandler):
                 else:
                     response = f"{get_all_categorys()}"
             
-            if resource == "users":
+            elif resource == "users":
                 if id is not None:
                     response = f"{get_users()}"
                 else:
@@ -101,25 +101,21 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_post(id)}"
                 else:
                     pass
+            
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
             if resource == "posts":
                 if key == "user_id":
                     response = f"{get_users_post(value)}"
 
-            if resource == "categories":
+            elif resource == "categories":
                 if key == "label":
-                    response = get_categories_by_label(value)       
+                    response = f"{get_categories_by_label(value)}"      
                 elif key == "id":
-                    response = get_categories_by_id(value)
+                    response = f"{get_categories_by_id(value)}"
                         
-
-            # Is the resource `customers` and was there a
-            # query parameter that specified the customer
-            # email as a filtering value?
-
-        if resource == 'tags':
-            response = f"{get_all_tags()}"
+            elif resource == 'tags':
+                response = f"{get_all_tags()}"
 
         self.wfile.write(response.encode())
 

@@ -110,7 +110,7 @@ def get_categories_by_label(label):
             category = Category(row['id'], row['label'])
             categories.append(category.__dict__)
 
-    return json.dumps(categories)
+        return json.dumps(categories)
 
 def get_categories_by_id(id):
 
