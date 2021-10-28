@@ -101,6 +101,8 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_post(id)}"
                 else:
                     pass
+            elif resource == 'tags':
+                response = f"{get_all_tags()}"
             
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
@@ -120,8 +122,7 @@ class HandleRequests(BaseHTTPRequestHandler):
                 elif key == "id":
                     response = f"{get_categories_by_id(value)}"
                         
-            elif resource == 'tags':
-                response = f"{get_all_tags()}"
+           
 
         self.wfile.write(response.encode())
 
