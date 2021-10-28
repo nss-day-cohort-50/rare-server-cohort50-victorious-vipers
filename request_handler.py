@@ -4,7 +4,7 @@ from categories import get_all_categorys, get_single_category, create_category, 
 from tags import create_tag, get_all_tags
 from posts import get_users_post, add_Post, delete_post, get_single_post, edit_post 
 from users import create_new_user, found_user, get_users
-from comments import get_comments_by_post, create_comment
+from comments import get_comments_by_post, create_comment, delete_comment
 
 
 # Here's a class. It inherits from another class.
@@ -107,7 +107,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             if resource == "posts":
                 if key == "user_id":
                     response = f"{get_users_post(value)}"
-            if resource == "comments":
+            elif resource == "comments":
                 if key == "post_id":
                     response = f"{get_comments_by_post(value)}"
             # Is the resource `customers` and was there a
@@ -124,6 +124,7 @@ class HandleRequests(BaseHTTPRequestHandler):
                 response = f"{get_all_tags()}"
 
         self.wfile.write(response.encode())
+
 
     # Here's a method on the class that overrides the parent's method.
     # It handles any POST request.
@@ -191,6 +192,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     delete_animal(id)
         if resource == "posts":
             delete_post(id)
+        if resource == "comments":
+            delete_comment(id)
         # Encode the new animal and send in response
         self.wfile.write("".encode())
 

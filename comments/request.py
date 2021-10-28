@@ -44,3 +44,11 @@ def create_comment(object):
         VALUES 
             (?,?,?,?)
         """, (object["post_id"], object["author_id"], object["content"], object["created_on"], ))
+
+def delete_comment(id):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        DELETE FROM Comments
+        WHERE id = ?
+        """, (id, ))
