@@ -74,6 +74,7 @@ def add_Post(object):
         VALUES
             (?,?,?,?,?)
         """, (object["user_id"], object["category_id"], object["title"], object["publication_date"], object["content"]))
+        return json.dumps(object)
 
 def delete_post(id):
     with sqlite3.connect(db_connect) as conn:
