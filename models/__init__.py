@@ -1,5 +1,8 @@
-from .tag import Tag
-from .posts import Posts
-from .category import Category
 from .users import User
+<<<<<<< HEAD
 from .comments import Comments
+=======
+from .category import Category
+from .posts import Posts
+from .tag import Tag
+>>>>>>> main

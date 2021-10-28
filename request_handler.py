@@ -1,9 +1,11 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from categories import get_all_categorys, get_single_category, create_category, get_categories_by_label, get_categories_by_id
 from tags import create_tag, get_all_tags
 from posts import get_users_post, add_Post, delete_post, get_single_post, edit_post 
 from users import create_new_user, found_user, get_users
 from comments import get_comments_by_post, create_comment
+
 
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
@@ -80,9 +82,16 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Parse the URL and capture the tuple that is returned
 
         if len(parsed) == 2:
-            (resource, id) = self.parse_url(self.path)
+            (resource, id) = parsed  #self.parse_url(self.path)
+
+            if resource == "categories":
+
+                if id is not None:
+                    response = f"{get_single_category(id)}"
+                else:
+                    response = f"{get_all_categorys()}"
             
-            if resource == "users":
+            elif resource == "users":
                 if id is not None:
                     response = f"{get_users()}"
                 else:
@@ -92,6 +101,7 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_post(id)}"
                 else:
                     pass
+            
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
             if resource == "posts":
@@ -104,8 +114,14 @@ class HandleRequests(BaseHTTPRequestHandler):
             # query parameter that specified the customer
             # email as a filtering value?
 
-        if resource == 'tags':
-            response = f"{get_all_tags()}"
+            elif resource == "categories":
+                if key == "label":
+                    response = f"{get_categories_by_label(value)}"      
+                elif key == "id":
+                    response = f"{get_categories_by_id(value)}"
+                        
+            elif resource == 'tags':
+                response = f"{get_all_tags()}"
 
         self.wfile.write(response.encode())
 
@@ -117,27 +133,18 @@ class HandleRequests(BaseHTTPRequestHandler):
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
 
-        # Convert JSON string to a Python dictionary
         post_body = json.loads(post_body)
 
-        # Parse the URL
         (resource, id) = self.parse_url(self.path)
 
-        # Initialize new animal
-        new_item= None
-        # Add a new animal to the list. Don't worry about
-        # the orange squiggle, you'll define the create_animal
-        # function next.
-        # EXAMPLE BELOW
-        # if resource == "animals":
-        #     new_item = create_animal(post_body)
-        
+        new_item = None
 
-        #EXAMPLE BELOW
         if resource == "register":
             new_item = create_new_user(post_body)
         elif resource == "login":
             new_item = found_user(post_body)
+        elif resource == "categories":
+            new_item = create_category(post_body)
         elif resource == "posts":
             new_item = add_Post(post_body)
         elif resource == "tags":
