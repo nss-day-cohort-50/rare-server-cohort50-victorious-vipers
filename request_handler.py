@@ -1,6 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from tags import create_tag, get_all_tags
+from tags import create_tag, get_all_tags, update_tag
 from posts import get_users_post, add_Post, delete_post, get_single_post, edit_post 
 from users import create_new_user, found_user, get_users
 
@@ -92,6 +92,9 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_post(id)}"
                 else:
                     pass
+            elif resource == 'tags':
+                response = f"{get_all_tags()}"
+
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
             if resource == "posts":
@@ -101,9 +104,6 @@ class HandleRequests(BaseHTTPRequestHandler):
             # Is the resource `customers` and was there a
             # query parameter that specified the customer
             # email as a filtering value?
-
-        if resource == 'tags':
-            response = f"{get_all_tags()}"
 
         self.wfile.write(response.encode())
 
@@ -160,6 +160,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     success = update_animal(id, post_body)
         if resource == "posts":
             success = edit_post(id, post_body)
+        elif resource == "tags":
+            success = update_tag(id, post_body)
         # Encode the new animal and send in response
         if success:
             self._set_headers(204)
