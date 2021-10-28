@@ -74,3 +74,12 @@ def update_tag(id, update_tag):
     else:
         # Forces 204 response by main module
         return True
+
+def delete_tag(id):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        DELETE FROM tags
+        WHERE id = ?
+        """, (id, ))
