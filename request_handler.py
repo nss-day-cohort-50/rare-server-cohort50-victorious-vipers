@@ -1,6 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from categories import get_all_categorys, get_single_category, create_category, get_categories_by_label, get_categories_by_id
+from categories import get_all_categories, get_single_category, create_category, get_categories_by_label, get_categories_by_id, delete_category, update_category
 from tags import create_tag, get_all_tags
 from posts import get_users_post, add_Post, delete_post, get_single_post, edit_post 
 from users import create_new_user, found_user, get_users
@@ -89,7 +89,7 @@ class HandleRequests(BaseHTTPRequestHandler):
                 if id is not None:
                     response = f"{get_single_category(id)}"
                 else:
-                    response = f"{get_all_categorys()}"
+                    response = f"{get_all_categories()}"
             
             elif resource == "users":
                 if id is not None:
@@ -101,22 +101,20 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_post(id)}"
                 else:
                     pass
-            
+            elif resource == 'tags':
+                    response = f"{get_all_tags()}"   
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
             if resource == "posts":
                 if key == "user_id":
                     response = f"{get_users_post(value)}"
 
-            elif resource == "categories":
-                if key == "label":
-                    response = f"{get_categories_by_label(value)}"      
-                elif key == "id":
-                    response = f"{get_categories_by_id(value)}"
+            # elif resource == "categories":
+            #     if key == "label":
+            #         response = f"{get_categories_by_label(value)}"      
+            #     elif key == "id":
+            #         response = f"{get_categories_by_id(value)}"
                         
-            elif resource == 'tags':
-                response = f"{get_all_tags()}"
-
         self.wfile.write(response.encode())
 
     # Here's a method on the class that overrides the parent's method.
@@ -168,6 +166,15 @@ class HandleRequests(BaseHTTPRequestHandler):
             self._set_headers(204)
         else:
             self._set_headers(404)
+        
+
+        if resource == "categories":
+            was_updated = update_category(id, post_body)
+        if was_updated:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
+            
         self.wfile.write("".encode())
 
     def do_DELETE(self):
@@ -183,6 +190,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     delete_animal(id)
         if resource == "posts":
             delete_post(id)
+        elif resource == "categories":
+            delete_category(id)
         # Encode the new animal and send in response
         self.wfile.write("".encode())
 
