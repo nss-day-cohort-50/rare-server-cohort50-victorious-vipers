@@ -4,7 +4,7 @@ from categories import get_all_categorys, get_single_category, create_category, 
 from tags import create_tag, get_all_tags
 from posts import get_users_post, add_Post, delete_post, get_single_post, edit_post 
 from users import create_new_user, found_user, get_users
-
+from comments import get_comments_by_post, create_comment
 
 
 # Here's a class. It inherits from another class.
@@ -107,6 +107,12 @@ class HandleRequests(BaseHTTPRequestHandler):
             if resource == "posts":
                 if key == "user_id":
                     response = f"{get_users_post(value)}"
+            if resource == "comments":
+                if key == "post_id":
+                    response = f"{get_comments_by_post(value)}"
+            # Is the resource `customers` and was there a
+            # query parameter that specified the customer
+            # email as a filtering value?
 
             elif resource == "categories":
                 if key == "label":
@@ -143,6 +149,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_item = add_Post(post_body)
         elif resource == "tags":
             new_item = create_tag(post_body)
+        elif resource == "comments":
+            new_item = create_comment(post_body)
         self.wfile.write(f"{new_item}".encode())
         # Encode the new animal and send in response
 
