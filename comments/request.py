@@ -40,7 +40,7 @@ def create_comment(object):
         db_cursor = conn.cursor()
         db_cursor.execute("""
         INSERT INTO Comments
-            (id, post_id, author_id, content, created_on)
+            (post_id, author_id, content, created_on)
         VALUES 
-            (?,?,?,?,?)
-        """)
+            (?,?,?,?)
+        """, (object["post_id"], object["author_id"], object["content"], object["created_on"], ))

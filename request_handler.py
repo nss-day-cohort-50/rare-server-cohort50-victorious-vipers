@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from tags import create_tag, get_all_tags
 from posts import get_users_post, add_Post, delete_post, get_single_post, edit_post 
 from users import create_new_user, found_user, get_users
-from comments import get_comments_by_post
+from comments import get_comments_by_post, create_comment
 
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
@@ -142,6 +142,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_item = add_Post(post_body)
         elif resource == "tags":
             new_item = create_tag(post_body)
+        elif resource == "comments":
+            new_item = create_comment(post_body)
         self.wfile.write(f"{new_item}".encode())
         # Encode the new animal and send in response
 
