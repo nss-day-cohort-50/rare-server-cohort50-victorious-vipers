@@ -61,9 +61,9 @@ def get_single_tag(id):
         # into the SQL statement.
         db_cursor.execute("""
         SELECT
-            t.id
+            t.id,
             t.label
-        FROM Tags t
+        FROM tags t
         WHERE t.id = ?
         """, (id, ))
 
