@@ -41,7 +41,6 @@ def get_all_tags():
         ORDER BY t.label ASC
         """)
 
-
         tags = []
         dataset = db_cursor.fetchall()
 
@@ -51,3 +50,60 @@ def get_all_tags():
 
             tags.append(tag.__dict__)
     return json.dumps(tags)
+
+
+def get_single_tag(id):
+    with sqlite3.connect("./rare.db") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Use a ? parameter to inject a variable's value
+        # into the SQL statement.
+        db_cursor.execute("""
+        SELECT
+            t.id,
+            t.label
+        FROM tags t
+        WHERE t.id = ?
+        """, (id, ))
+
+        # Load the single result into memory
+        data = db_cursor.fetchone()
+
+        # Create an animal instance from the current row
+        tag = Tag(data['id'], data['label'])
+
+        return json.dumps(tag.__dict__)
+
+
+def update_tag(id, update_tag):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        UPDATE Tags
+            SET
+                label = ?
+        WHERE id = ?
+        """, (update_tag['label'], id, ))
+
+        # Were any rows affected?
+        # Did the client send an `id` that exists?
+        rows_affected = db_cursor.rowcount
+
+    if rows_affected == 0:
+        # Forces 404 response by main module
+        return False
+    else:
+        # Forces 204 response by main module
+        return True
+
+
+def delete_tag(id):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        DELETE FROM tags
+        WHERE id = ?
+        """, (id, ))
