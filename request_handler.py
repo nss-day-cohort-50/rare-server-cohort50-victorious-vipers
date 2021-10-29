@@ -1,7 +1,7 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from tags import create_tag, get_all_tags, update_tag, delete_tag, get_single_tag
 from categories import get_all_categorys, get_single_category, create_category, get_categories_by_label, get_categories_by_id
-from tags import create_tag, get_all_tags
 from posts import get_users_post, add_Post, delete_post, get_single_post, edit_post 
 from users import create_new_user, found_user, get_users
 from comments import get_comments_by_post, create_comment, delete_comment
@@ -102,7 +102,11 @@ class HandleRequests(BaseHTTPRequestHandler):
                 else:
                     pass
             elif resource == 'tags':
-                response = f"{get_all_tags()}"
+                if id is not None:
+                    response = f"{get_single_tag(id)}"
+                else:
+                    response = f"{get_all_tags()}"
+
             
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
@@ -116,14 +120,15 @@ class HandleRequests(BaseHTTPRequestHandler):
             # query parameter that specified the customer
             # email as a filtering value?
 
+            # Is the resource `customers` and was there a
+            # query parameter that specified the customer
+            # email as a filtering value?
             elif resource == "categories":
                 if key == "label":
                     response = f"{get_categories_by_label(value)}"      
                 elif key == "id":
                     response = f"{get_categories_by_id(value)}"
                         
-           
-
         self.wfile.write(response.encode())
 
 
@@ -173,6 +178,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     success = update_animal(id, post_body)
         if resource == "posts":
             success = edit_post(id, post_body)
+        elif resource == "tags":
+            success = update_tag(id, post_body)
         # Encode the new animal and send in response
         if success:
             self._set_headers(204)
@@ -193,8 +200,10 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     delete_animal(id)
         if resource == "posts":
             delete_post(id)
-        if resource == "comments":
+        elif resource == "comments":
             delete_comment(id)
+        elif resource == "tags":
+            delete_tag(id)
         # Encode the new animal and send in response
         self.wfile.write("".encode())
 
