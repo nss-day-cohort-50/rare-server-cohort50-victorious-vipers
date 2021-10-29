@@ -74,17 +74,21 @@ def get_single_category(id):
 def create_category(new_category):
     with sqlite3.connect("./rare.db") as conn:
         db_cursor = conn.cursor()
-
-        db_cursor.execute("""
+        db_cursor.execute(
+            """
         INSERT INTO Categories
-            (label)
-        VALUES (?);
-        """, (new_category['label'], ))
+        (label)
+        VALUES (?)
+        """,
+            (new_category["label"],),
+        )
+
         id = db_cursor.lastrowid
         new_category['id'] = id
-        return json.dumps("new_category")
 
-def update_category(id, new_category):
+    return json.dumps(new_category)
+
+def update_category(new_category, id):
     with sqlite3.connect("./rare.db") as conn:
         db_cursor = conn.cursor()
         db_cursor.execute(
@@ -93,7 +97,7 @@ def update_category(id, new_category):
         SET label = ?
         WHERE id = ?
         """,
-            (new_category["label"], id),
+            (new_category['label'], id),
         )
         was_updated = db_cursor.rowcount
 
