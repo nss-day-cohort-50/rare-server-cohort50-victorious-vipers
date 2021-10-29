@@ -2,7 +2,7 @@ import sqlite3
 import json
 from models import Category
 
-def get_all_categorys():
+def get_all_categories():
     # Open a connection to the database
     with sqlite3.connect("./rare.db") as conn:
 
@@ -13,15 +13,13 @@ def get_all_categorys():
         # Write the SQL query to get the information you want
         db_cursor.execute(
             """
-        SELECT
-            c.id,
-            c.label         
+        SELECT *
         FROM Categories c
         """
         )
 
         # Initialize an empty list to hold all category representations
-        categorys = []
+        categories = []
 
         # Convert rows of data into a Python list
         dataset = db_cursor.fetchall()
@@ -38,10 +36,10 @@ def get_all_categorys():
                 row["label"],                
             )
 
-            categorys.append(category.__dict__)
+            categories.append(category.__dict__)
 
     # Use `json` package to properly serialize list as JSON
-    return json.dumps(categorys)
+    return json.dumps(categories)
 
 
 def get_single_category(id):
@@ -76,17 +74,38 @@ def get_single_category(id):
 def create_category(new_category):
     with sqlite3.connect("./rare.db") as conn:
         db_cursor = conn.cursor()
-
-        db_cursor.execute("""
+        db_cursor.execute(
+            """
         INSERT INTO Categories
-            (label)
-        VALUES (?);
-        """, (new_category['label'], ))
-        
+        (label)
+        VALUES (?)
+        """,
+            (new_category["label"],),
+        )
 
-    #     id = db_cursor.lastrowid
-        # new_category['id'] = id
-        return json.dumps("item")
+        id = db_cursor.lastrowid
+        new_category['id'] = id
+
+    return json.dumps(new_category)
+
+def update_category(id, new_category):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute(
+            """
+        Update Categories
+        SET label = ?
+        WHERE id = ?
+        """,
+            (new_category["label"], id),
+        )
+        was_updated = db_cursor.rowcount
+
+        if was_updated:
+            return True
+        else:
+            return False
+
 
 def get_categories_by_label(label):
 
@@ -134,3 +153,14 @@ def get_categories_by_id(id):
             categories.append(category.__dict__)
 
     return json.dumps(categories)
+
+def delete_category(id):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        DELETE FROM Categories
+        WHERE id = ?
+        """,
+            (id,),
+        )
+
