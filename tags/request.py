@@ -27,6 +27,7 @@ def create_tag(new_tag):
     return json.dumps(new_tag)
 
 
+
 def get_all_tags():
     with sqlite3.connect("./rare.db") as conn:
 
